@@ -62,10 +62,14 @@ app.get('/books/new', function (req,res){
 });
 
 app.get('/books', function (req,res){
+  res.render('index.html.ejs');
+});
+
+app.get('/api/books', function (req,res){
   Book.find({})
   .populate('user')
   .exec(function(err, success) {
-        res.render('index.html.ejs');
+        res.json(success);
     });
 });
 
@@ -118,7 +122,7 @@ app.get('/signup', function (req, res) {
 });
 
 // Sign up route - creates a new user with a secure password
-app.post('/users', function (req, res) {
+app.post('/api/users', function (req, res) {
   // use the email and password to authenticate here
   User.createSecure(req.body.email, req.body.password, req.body.fName, req.body.lName, req.body.img, function (err, user) {
 		req.session.userId = user._id;
