@@ -7,16 +7,20 @@ var Schema = mongoose.Schema;
 
 // define user schema
 var userSchema = new Schema({
-    admin: Boolean, 
+    admin: Boolean,
     fName: String,
     lName: String,
     email: String,
     img: String,
     passwordDigest: String,
-    Children: {
+    children: [{
       type: Schema.Types.ObjectId,
       ref: 'Children'
-    }
+    }],
+    books: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Book'
+    }]
 });
 
 // create a new user with secure (hashed) password

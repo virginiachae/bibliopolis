@@ -3,12 +3,15 @@ var express = require('express'),
   app = express(),
   bodyParser = require('body-parser'),
   mongoose = require('mongoose'),
-	User = require('./models/user');
+	User = require('./models/user'),
+  Book = require('./models/book');
 
 var session = require('express-session');
+var controllers = require('./controllers');
 
 // middleware
 app.use(express.static('public'));
+app.use(express.static('views'));
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 mongoose.connect('mongodb://localhost/bibliopolis');
@@ -33,13 +36,85 @@ app.use('/', function (req, res, next) {
   next();
 });
 
+/////////////////
+//controllers///
+///////////////
+// app.get('/books/destroy', function (req,res){
+//   Book.remove({})
+//   .exec(function(err, success) {
+//         res.send(success);
+//     });
+// });
+//
+// app.get('/users/destroy', function (req,res){
+//   User.remove({})
+//   .exec(function(err, success) {
+//         res.send(success);
+//     });
+// });
+
+app.get('/', function (req,res){
+  res.render('index.html.ejs');
+});
+
+app.get('/books/new', function (req,res){
+  res.render('index.html.ejs');
+});
+
+app.get('/books', function (req,res){
+  Book.find({})
+  .populate('user')
+  .exec(function(err, success) {
+        res.render('index.html.ejs');
+    });
+});
+
+app.post('/books', function (req,res){
+  var newBook = new Book(req.body);
+  User.findOne({
+    email: req.body.user,
+  }, function (err, bookUser) {
+    if (err) {
+      console.log(err);
+      return
+    }
+    newBook.user = bookUser;
+    bookUser.books.push(newBook);
+    bookUser.save(function(err, succ) {
+      if (err) {
+        console.log(err);
+      }
+    newBook.save(function(err, succ) {
+      if (err) {
+        console.log(err);
+      }
+
+      res.redirect('/books');
+    })
+    });
+  });
+});
+
+app.get('/users', function (req,res){
+  User.find({})
+  .populate('books')
+  .exec(function(err, success) {
+        res.render('index.html.ejs');
+    });
+});
+
+
+
+
+
+
 ////LOGIN AND SIGNUP for USERS!!
 // signup route (renders signup view)
 app.get('/signup', function (req, res) {
   if (req.session.userId != null || undefined) {
     res.redirect('user-show')
   }
-		res.render('signup');
+		res.render('index.html.ejs');
 });
 
 // Sign up route - creates a new user with a secure password
@@ -51,15 +126,15 @@ app.post('/users', function (req, res) {
   });
 });
 
-// login route with placeholder response
+// login route with placeholder response AJS DONE
 app.get('/login', function (req, res) {
   if (req.session.userId != null || undefined) {
     res.redirect('user-show')
   }
-  res.render('login');
+  res.render('index.html.ejs');
 });
 
-// authenticate the user
+// authenticate the user AJS DONE
 app.post('/sessions', function (req, res) {
   // call authenticate function to check if password user entered is correct
   User.authenticate(req.body.email, req.body.password, function (err, currentUser) {
@@ -68,12 +143,12 @@ app.post('/sessions', function (req, res) {
       console.log(err);
       req.session.userId = null;
       //can redirect to static "uh oh " page or use alert
-			res.redirect('login')
+			res.redirect('/login')
 		}
 		else {
       //User successfully logged in
     req.session.userId = currentUser._id;
-		res.redirect('user-show')
+		res.redirect('/user-show')
 	}
   });
 });
@@ -81,20 +156,19 @@ app.post('/sessions', function (req, res) {
 // show user profile page
 app.get('/user-show', function (req, res) {
   // find the user currently logged in
-  if (req.session.userId === null || undefined) {
+  if (req.session.userId === undefined) {
     res.redirect('login')
   }
   User.findOne({_id: req.session.userId}, function (err, currentUser) {
-    res.render('user-show.ejs', {user: currentUser})
+    res.render('index.html.ejs')
 	});
 });
 
 app.get('/logout', function (req, res) {
   // remove the session user id
-  req.session.userId = null;
-  req.user = null;
+  req.session.userId = undefined;
   // redirect to login (for now)
-  res.redirect('/login');
+  res.render('index.html.ejs');
 });
 
 // listen on port 3000

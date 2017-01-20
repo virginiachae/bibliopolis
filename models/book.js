@@ -12,6 +12,10 @@ var BookSchema = new Schema({
     img: String,
 		rentalDue: String,
 		fee: Number,
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    },
 		child: {
       type: Schema.Types.ObjectId,
       ref: 'Children'
