@@ -66,10 +66,22 @@ biblio.controller('UserShowController', ['$scope', '$http', function($scope, $ht
         method: 'GET',
         url: '/api/current-user'
     }).then(function successCb(res) {
-			console.log(res.data);
 				$scope.user = res.data;
     }, function errorCb(res) {
         console.log('there was an error getting book data', res);
     });
+
+    $scope.editUser = function (user) {
+    $http({
+      method: 'PUT',
+      url: '/api/users',
+      data: user
+    }).then(function successCallback(json) {
+      // don't need to do anything!
+    }, function errorCallback(res) {
+      console.log('user is ', user);
+      console.log('There was an error editing the data in angular', res);
+    });
+  }
 
 }])

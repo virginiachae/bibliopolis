@@ -1,0 +1,9 @@
+.profile-pic{
+	height: 300px;
+	width: 400px;
+}
+.book-pic{
+	height: 300px;
+	width: 200px;
+	float: left;
+}

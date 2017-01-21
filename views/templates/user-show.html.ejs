@@ -1,16 +1,42 @@
-    <div class="container text-center">
-        <div class="row">
-            <div class="col-md-6 col-md-offset-3">
-                <h1>Profile</h1>
-                  <a id="logout" href="/logout" class="btn btn-default">Log Out</a>
-                <hr>
+<div class="container text-center">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <h1>Profile</h1>
+            <a id="logout" href="/logout" class="btn btn-default">Log Out</a>
+            <hr>
+            <div class="list-group-item">
                 <h2>Welcome {{user.fName}}!</h2>
-                  <div ng-repeat="book in user.books">
-                    <p>
-                      {{book.title}}
-                    </p>
-                  </div>
+                <img class="profile-pic" src="{{user.img}}" alt="" />
+                <br>
+
+                <strong>Name: </strong><span ng-hide="editing">{{user.fName}} {{user.lName}}</span>
+                <input ng-show="editing" ng-model="user.fName" name="fName" type="text" class="form-control input-md" placeholder="first name">
+                <input ng-show="editing" ng-model="user.lName" name="lName" type="text" class="form-control input-md" placeholder="last name">
+                <input ng-hide="true" ng-model="user._id" name="_id" type="text" class="form-control input-md" placeholder="last name">
+                <br>
+                <strong>Email: </strong><span ng-hide="editing">{{user.email}}</span>
+                <input ng-show="editing" ng-model="user.email" name="email" type="text" class="form-control input-md" placeholder="email">
+                <br>
+                <button class='btn btn-info' ng-hide="editing" ng-click="editing = true">Edit Profile</button>
+                <button class='btn btn-success' ng-show="editing" ng-click="editUser(user); editing = false" action="/api/users" method: "PUT">Save Changes</button>
+            </div>
+
+
+                <div ng-repeat="book in user.books">
+                  <div class="list-group-item">
+                    <div class="row">
+                    <div class="col-md-4">
+                  <img class="book-pic" src="{{book.img}}" alt="" />
+                </div>
+                    <div class="col-md-8">
+                    <h4>{{book.title}}</h4>
+                    by: {{book.author}} <br>
+                    For ages: {{book.ageRange}}
+                </div>
+                </div>
+                </div>
             </div>
         </div>
     </div>
+</div>
 </body>
