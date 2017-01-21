@@ -52,7 +52,7 @@ app.use('/', function (req, res, next) {
 //         res.send(success);
 //     });
 // });
-
+ var currentUserId;
 app.get('/', function (req,res){
   res.render('index.html.ejs');
 });
@@ -73,7 +73,7 @@ app.get('/api/books', function (req,res){
     });
 });
 
-app.post('/books', function (req,res){
+app.post('/api/books', function (req,res){
   var newBook = new Book(req.body);
   User.findOne({
     email: req.body.user,
@@ -100,15 +100,8 @@ app.post('/books', function (req,res){
 });
 
 app.get('/users', function (req,res){
-  User.find({})
-  .populate('books')
-  .exec(function(err, success) {
-        res.render('index.html.ejs');
-    });
+  res.render('index.html.ejs');
 });
-
-
-
 
 
 
@@ -119,6 +112,14 @@ app.get('/signup', function (req, res) {
     res.redirect('user-show')
   }
 		res.render('index.html.ejs');
+});
+
+app.get('/api/users', function (req, res) {
+  User.find({})
+  .populate('books')
+  .exec(function(err, success) {
+        res.json(success);
+    });
 });
 
 // Sign up route - creates a new user with a secure password
@@ -152,6 +153,7 @@ app.post('/sessions', function (req, res) {
 		else {
       //User successfully logged in
     req.session.userId = currentUser._id;
+    currentUserId = currentUser._id
 		res.redirect('/user-show')
 	}
   });
@@ -173,6 +175,28 @@ app.get('/logout', function (req, res) {
   req.session.userId = undefined;
   // redirect to login (for now)
   res.render('index.html.ejs');
+});
+
+app.get('/api/current-user', function(req, res){
+  User.findOne({_id: req.session.userId})
+  .populate('books')
+  .exec(function (err, user) {
+    if (!user) {
+    console.log("No User Found", null);
+    } else {
+    res.json(user);
+    }
+  });
+})
+
+
+
+app.get('/api/books', function (req,res){
+  Book.find({})
+  .populate('user')
+  .exec(function(err, success) {
+        res.json(success);
+    });
 });
 
 // listen on port 3000

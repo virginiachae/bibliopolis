@@ -17,7 +17,7 @@ biblio.config(['$routeProvider', '$locationProvider', function($routeProvider, $
         })
         .when('/user-show', {
             templateUrl: "templates/user-show.html.ejs",
-            controller: 'UserController'
+            controller: 'UserShowController'
         })
         .when('/signup', {
             templateUrl: "templates/signup.html.ejs"
@@ -28,6 +28,10 @@ biblio.config(['$routeProvider', '$locationProvider', function($routeProvider, $
         .when('/books', {
             templateUrl: 'templates/booksIndex.html.ejs',
             controller: 'BooksIndexController'
+        })
+				.when('/users', {
+            templateUrl: 'templates/UsersIndex.html.ejs',
+            controller: 'UsersIndexController'
         })
 
 }]);
@@ -44,12 +48,26 @@ biblio.controller('BooksIndexController', ['$scope', '$http', function($scope, $
     });
 }]);
 
-biblio.controller('UserController', ['$scope', '$http', function($scope, $http) {
+biblio.controller('UsersIndexController', ['$scope', '$http', function($scope, $http) {
     $http({
         method: 'GET',
         url: '/api/users'
     }).then(function successCb(res) {
         console.log(res);
+				$scope.users = res.data
+    }, function errorCb(res) {
+        console.log('there was an error getting book data', res);
+    });
+
+}])
+
+biblio.controller('UserShowController', ['$scope', '$http', function($scope, $http) {
+		$http({
+        method: 'GET',
+        url: '/api/current-user'
+    }).then(function successCb(res) {
+			console.log(res.data);
+				$scope.user = res.data;
     }, function errorCb(res) {
         console.log('there was an error getting book data', res);
     });
