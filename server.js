@@ -110,6 +110,35 @@ app.get('/users', function(req, res) {
     res.render('index.html.ejs');
 });
 
+app.put('/api/books', function(req, res) {
+    console.log('updating with data', req.body);
+    Book.findById(req.body._id, function(err, foundBook) {
+        console.log(req.body);
+        if (err) {
+            console.log('error in server.js', err);
+        } else {
+            foundBook.title = req.body.title;
+            foundBook.author = req.body.author;
+            foundBook.ageRange = req.body.ageRange;
+            foundBook.img = req.body.img;
+            foundBook.save(function(err, savedBook) {
+                if (err) {
+                    console.log('saving altered user failed in last server thing');
+                }
+                res.json({savedBook});
+            });
+        };
+    })
+})
+
+app.delete('/api/books', function(req, res) {
+  console.log(req);
+  Book.findOneAndRemove({ _id: req.body._id }, function(err, foundAlbum){
+    // note you could send just send 204, but we're sending 200 and the deleted entity
+    res.json({foundAlbum});
+  });
+})
+
 
 
 ////LOGIN AND SIGNUP for USERS!!

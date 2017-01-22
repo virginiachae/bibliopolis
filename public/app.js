@@ -84,4 +84,29 @@ biblio.controller('UserShowController', ['$scope', '$http', function($scope, $ht
     });
   }
 
+  $scope.editBook = function (book) {
+  $http({
+    method: 'PUT',
+    url: '/api/books',
+    data: book
+  }).then(function successCallback(json) {
+    // don't need to do anything!
+  }, function errorCallback(res) {
+    console.log('book is ', book);
+    console.log('There was an error editing the data in angular', res);
+  });
+}
+
+$scope.deleteBook = function (book) {
+    $http({
+      method: 'DELETE',
+      url: '/api/books'
+    }).then(function successCallback(json) {
+      var index = $scope.user.books.indexOf(book);
+       $scope.user.books.splice(index,1)
+    }, function errorCallback(response) {
+      console.log('There was an error deleting the data', response);
+    });
+  }
+
 }])
