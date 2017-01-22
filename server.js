@@ -135,7 +135,7 @@ app.delete('/api/books', function(req, res) {
   console.log(req);
   Book.findOneAndRemove({ _id: req.body._id }, function(err, foundAlbum){
     // note you could send just send 204, but we're sending 200 and the deleted entity
-    res.json({foundAlbum});
+    res.json(foundAlbum);
   });
 })
 
