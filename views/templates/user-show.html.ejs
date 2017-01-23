@@ -1,9 +1,6 @@
 <div class="container text-center">
   <div class="row">
         <div class="col-md-6 col-md-offset-3">
-            <h1>Profile</h1>
-            <a id="logout" href="/logout" class="btn btn-default">Log Out</a>
-            <hr>
             <div class="list-group-item">
                 <h2>Welcome {{user.fName}}!</h2>
                 <img class="profile-pic" src="{{user.img}}" alt="" />
@@ -19,30 +16,44 @@
                 <br>
                 <button class='btn btn-info' ng-hide="editing" ng-click="editing = true">Edit Profile</button>
                 <button class='btn btn-success' ng-show="editing" ng-click="editUser(user); editing = false" action="/api/users" method: "PUT">Save Changes</button>
+                <a id="logout" href="/logout" class="btn btn-default">Log Out</a>
             </div>
           </div>
         </div>
 
 <br>
 <h1>My Books: </h1>
-                <div ng-repeat="book in user.books">
+<br>
+<input type="text" ng-model="search" placeholder="search for a book" />
+<br>
+<hr>
+                <div ng-repeat="book in user.books | orderBy: title | filter: search">
                   <div class="list-group-item col-md-offset-1">
                     <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-md-4">
                   <img class="book-pic" src="{{book.img}}" alt="" />
                   <input ng-show="editing" ng-model="book.img" name="img" type="text" class="form-control input-md" placeholder="Image URL">
                 </div>
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                     <h4>{{book.title}}</h4>
                     <input ng-show="editing" ng-model="book.title" name="title" type="text" class="form-control input-md" placeholder="Title">
                     by: {{book.author}} <br>
                     <input ng-show="editing" ng-model="book.author" name="author" type="text" class="form-control input-md" placeholder="Author">
-                    For ages: {{book.ageRange}}
+                    For ages: {{book.ageRange}}<br>
                     <input ng-show="editing" ng-model="book.ageRange" name="ageRange" type="text" class="form-control input-md" placeholder="Age Range">
+                    Checked Out By: {{book.child}}
+                    <input ng-show="editing" ng-model="book.child" name="child" type="text" class="form-control input-md" placeholder="Child's Name">
                     <br>
                     <button class='btn btn-info' ng-hide="editing" ng-click="editing = true">Edit Book</button>
                     <button class='btn btn-success' ng-show="editing" ng-click="editBook(book); editing = false" action="/api/books" method: "PUT">Save Changes</button>
                     <button class='btn btn-danger' ng-click="deleteBook(book)" action="/api/books" method: "DELETE">Delete Book</button>
+                    <!-- <button class='btn btn-warning' ng-hide="borrowing" ng-click="borrowing = true">Rent out Book</button>
+                    <br>
+                    <input type:"text" ng-show="borrowing" ng-model="search" name="child" class="form-control input-md" placeholder="Search for Child">
+                    <div ng-repeat="child in children | orderBy: fullName | filter: search" ng-show="borrowing">
+                    {{child.fullName}}
+                  </div>
+                  <button class='btn btn-warning' ng-show="borrowing" ng-click="borrowBook(book); borrowing = false" action="/api/books" method: "PATCH">Rent out Book</button> -->
                 </div>
                 </div>
                 </div>

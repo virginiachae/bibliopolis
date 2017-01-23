@@ -33,6 +33,9 @@ biblio.config(['$routeProvider', '$locationProvider', function($routeProvider, $
             templateUrl: 'templates/UsersIndex.html.ejs',
             controller: 'UsersIndexController'
         })
+        .when('/children/new', {
+            templateUrl: 'templates/new-child.html.ejs',
+        })
 }]);
 
 biblio.controller('BooksIndexController', ['$scope', '$http', function($scope, $http) {
@@ -66,6 +69,15 @@ biblio.controller('UserShowController', ['$scope', '$http', '$routeParams', func
         url: '/api/current-user'
     }).then(function successCb(res) {
 				$scope.user = res.data;
+    }, function errorCb(res) {
+        console.log('there was an error getting book data', res);
+    });
+
+    $http({
+        method: 'GET',
+        url: '/api/children'
+    }).then(function successCb(res) {
+				$scope.children = res.data;
     }, function errorCb(res) {
         console.log('there was an error getting book data', res);
     });
@@ -108,5 +120,19 @@ $scope.deleteBook = function (book) {
       console.log('There was an error deleting the data', response);
     });
   }
+
+  $scope.borrowBook = function (book) {
+  $http({
+    method: 'PATCH',
+    url: '/api/books',
+    data: book
+  }).then(function successCallback(json) {
+    // don't need to do anything!
+  }, function errorCallback(res) {
+    console.log('book is ', book);
+    console.log('There was an error editing the data in angular', res);
+  });
+}
+
 
 }])

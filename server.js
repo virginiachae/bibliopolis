@@ -5,6 +5,7 @@ var express = require('express'),
     mongoose = require('mongoose'),
     User = require('./models/user'),
     Book = require('./models/book');
+Children = require('./models/children');
 
 var session = require('express-session');
 var controllers = require('./controllers');
@@ -75,6 +76,7 @@ app.get('/books', function(req, res) {
 app.get('/api/books', function(req, res) {
     Book.find({})
         .populate('user')
+        .populate('child')
         .exec(function(err, success) {
             res.json(success);
         });
@@ -106,157 +108,202 @@ app.post('/api/books', function(req, res) {
     });
 });
 
+app.get('/api/children', function(req, res) {
+    Children.find({})
+        .populate('books')
+        .exec(function(err, success) {
+            res.json(success);
+        });
+})
+
+
+app.post('/api/children', function(req, res) {
+    Children.create(req.body, function(err, child) {
+        if (err) {
+            console.log('error', err);
+        }
+        console.log(child);
+        res.json(child);
+    });
+})
+
+app.get('/children/new', function(req, res) {
+    res.render('index.html.ejs');
+});
+
+
 app.get('/users', function(req, res) {
     res.render('index.html.ejs');
 });
 
 app.put('/api/books', function(req, res) {
-    console.log('updating with data', req.body);
-    Book.findById(req.body._id, function(err, foundBook) {
-        console.log(req.body);
-        if (err) {
-            console.log('error in server.js', err);
-        } else {
-            foundBook.title = req.body.title;
-            foundBook.author = req.body.author;
-            foundBook.ageRange = req.body.ageRange;
-            foundBook.img = req.body.img;
-            foundBook.save(function(err, savedBook) {
-                if (err) {
-                    console.log('saving altered user failed in last server thing');
-                }
-                res.json({savedBook});
-            });
-        };
-    })
-})
+            console.log('updating with data', req.body);
+            Book.findById(req.body._id, function(err, foundBook) {
+                        console.log(req.body);
+                        if (err) {
+                            console.log('error in server.js', err);
+                        } else {
+                            Children.findOne({
+                                    fullName: req.body.child,
+                                }, function(err, bookChild) {
+                                    if (err) {
+                                        console.log(err);
+                                        return
+                                    }
+                                    foundBook.child = bookChild;
+                                    bookChild.books.push(foundBook);
+                                    bookChild.save(function(err, succ) {
+                                            if (err) {
+                                                console.log(err);
+                                            }
+                                            foundBook.title = req.body.title;
+                                            foundBook.author = req.body.author;
+                                            foundBook.ageRange = req.body.ageRange;
+                                            foundBook.img = req.body.img;
+                                            foundBook.save(function(err, savedBook) {
+                                                if (err) {
+                                                    console.log('saving altered user failed in last server thing');
+                                                }
+                                                res.json({
+                                                    savedBook
+                                                });
+                                            });
+                                        });
+                                    })
+                            }
+                          })
+                        })
 
-app.delete('/api/books/:id', function destroy(req, res) {
-  console.log(req);
-  Book.findOneAndRemove({ _id: req.params.id }, function(err, foundBook){
-    // note you could send just send 204, but we're sending 200 and the deleted entity
-    res.json(foundBook);
-  });
-});
+                        app.delete('/api/books/:id', function destroy(req, res) {
+                            console.log(req);
+                            Book.findOneAndRemove({
+                                _id: req.params.id
+                            }, function(err, foundBook) {
+                                // note you could send just send 204, but we're sending 200 and the deleted entity
+                                res.json(foundBook);
+                            });
+                        });
 
 
 
-////LOGIN AND SIGNUP for USERS!!
-// signup route (renders signup view)
-app.get('/signup', function(req, res) {
-    if (req.session.userId != null || undefined) {
-        res.redirect('user-show')
-    }
-    res.render('index.html.ejs');
-});
+                        ////LOGIN AND SIGNUP for USERS!!
+                        // signup route (renders signup view)
+                        app.get('/signup', function(req, res) {
+                            if (req.session.userId != null || undefined) {
+                                res.redirect('user-show')
+                            }
+                            res.render('index.html.ejs');
+                        });
 
-app.get('/api/users', function(req, res) {
-    User.find({})
-        .populate('books')
-        .exec(function(err, success) {
-            res.json(success);
-        });
-});
+                        app.get('/api/users', function(req, res) {
+                            User.find({})
+                                .populate('books')
+                                .exec(function(err, success) {
+                                    res.json(success);
+                                });
+                        });
 
-// Sign up route - creates a new user with a secure password
-app.post('/api/users', function(req, res) {
-    // use the email and password to authenticate here
-    User.createSecure(req.body.email, req.body.password, req.body.fName, req.body.lName, req.body.img, function(err, user) {
-        req.session.userId = user._id;
-        res.redirect('../user-show')
-    });
-});
+                        // Sign up route - creates a new user with a secure password
+                        app.post('/api/users', function(req, res) {
+                            // use the email and password to authenticate here
+                            User.createSecure(req.body.email, req.body.password, req.body.fName, req.body.lName, req.body.img, function(err, user) {
+                                req.session.userId = user._id;
+                                res.redirect('../user-show')
+                            });
+                        });
 
-// login route with placeholder response AJS DONE
-app.get('/login', function(req, res) {
-    if (req.session.userId != null || undefined) {
-        res.redirect('user-show')
-    }
-    res.render('index.html.ejs');
-});
+                        // login route with placeholder response AJS DONE
+                        app.get('/login', function(req, res) {
+                            if (req.session.userId != null || undefined) {
+                                res.redirect('user-show')
+                            }
+                            res.render('index.html.ejs');
+                        });
 
-// authenticate the user AJS DONE
-app.post('/sessions', function(req, res) {
-    // call authenticate function to check if password user entered is correct
-    User.authenticate(req.body.email, req.body.password, function(err, currentUser) {
-        if (err) {
-            //bad username/password/some other error
-            console.log(err);
-            req.session.userId = null;
-            //can redirect to static "uh oh " page or use alert
-            res.redirect('/login')
-        } else {
-            //User successfully logged in
-            req.session.userId = currentUser._id;
-            currentUserId = currentUser._id
-            res.redirect('/user-show')
-        }
-    });
-});
+                        // authenticate the user AJS DONE
+                        app.post('/sessions', function(req, res) {
+                            // call authenticate function to check if password user entered is correct
+                            User.authenticate(req.body.email, req.body.password, function(err, currentUser) {
+                                if (err) {
+                                    //bad username/password/some other error
+                                    console.log(err);
+                                    req.session.userId = null;
+                                    //can redirect to static "uh oh " page or use alert
+                                    res.redirect('/login')
+                                } else {
+                                    //User successfully logged in
+                                    req.session.userId = currentUser._id;
+                                    currentUserId = currentUser._id
+                                    res.redirect('/user-show')
+                                }
+                            });
+                        });
 
-// show user profile page
-app.get('/user-show', function(req, res) {
-    // find the user currently logged in
-    if (req.session.userId === undefined) {
-        res.redirect('login')
-    }
-    User.findOne({
-        _id: req.session.userId
-    }, function(err, currentUser) {
-        res.render('index.html.ejs')
-    });
-});
+                        // show user profile page
+                        app.get('/user-show', function(req, res) {
+                            // find the user currently logged in
+                            if (req.session.userId === undefined) {
+                                res.redirect('login')
+                            }
+                            User.findOne({
+                                _id: req.session.userId
+                            }, function(err, currentUser) {
+                                res.render('index.html.ejs')
+                            });
+                        });
 
-app.get('/logout', function(req, res) {
-    // remove the session user id
-    req.session.userId = undefined;
-    // redirect to login (for now)
-    res.render('index.html.ejs');
-});
+                        app.get('/logout', function(req, res) {
+                            // remove the session user id
+                            req.session.userId = undefined;
+                            // redirect to login (for now)
+                            res.render('index.html.ejs');
+                        });
 
-app.get('/api/current-user', function(req, res) {
-    User.findOne({
-            _id: req.session.userId
-        })
-        .populate('books')
-        .exec(function(err, user) {
-            if (!user) {
-                console.log("No User Found", null);
-            } else {
-                res.json(user);
-            }
-        });
-})
+                        app.get('/api/current-user', function(req, res) {
+                            User.findOne({
+                                    _id: req.session.userId
+                                })
+                                .populate('books')
+                                .exec(function(err, user) {
+                                    if (!user) {
+                                        console.log("No User Found", null);
+                                    } else {
+                                        res.json(user);
+                                    }
+                                });
+                        })
 
-app.put('/api/users', function(req, res) {
-    console.log('updating with data', req.body);
-    User.findById(req.body._id, function(err, foundUser) {
-        console.log(req.body);
-        if (err) {
-            console.log('error in server.js', err);
-        } else {
-            foundUser.fName = req.body.fName;
-            foundUser.lName = req.body.lName;
-            foundUser.email = req.body.email;
-            foundUser.save(function(err, savedUser) {
-                if (err) {
-                    console.log('saving altered user failed in last server thing');
-                }
-                res.json({savedUser});
-            });
-        };
-    })
-})
+                        app.put('/api/users', function(req, res) {
+                            console.log('updating with data', req.body);
+                            User.findById(req.body._id, function(err, foundUser) {
+                                console.log(req.body);
+                                if (err) {
+                                    console.log('error in server.js', err);
+                                } else {
+                                    foundUser.fName = req.body.fName;
+                                    foundUser.lName = req.body.lName;
+                                    foundUser.email = req.body.email;
+                                    foundUser.save(function(err, savedUser) {
+                                        if (err) {
+                                            console.log('saving altered user failed in last server thing');
+                                        }
+                                        res.json({
+                                            savedUser
+                                        });
+                                    });
+                                };
+                            })
+                        })
 
-app.get('/api/books', function(req, res) {
-    Book.find({})
-        .populate('user')
-        .exec(function(err, success) {
-            res.json(success);
-        });
-});
+                        app.get('/api/books', function(req, res) {
+                            Book.find({})
+                                .populate('user')
+                                .exec(function(err, success) {
+                                    res.json(success);
+                                });
+                        });
 
-// listen on port 3000
-app.listen(3000, function() {
-    console.log('server started on locahost:3000');
-});
+                        // listen on port 3000
+                        app.listen(3000, function() {
+                            console.log('server started on locahost:3000');
+                        });

@@ -6,9 +6,9 @@ var Schema = mongoose.Schema;
 
 // define user schema
 var ChildrenSchema = new Schema({
-    fName: String,
-    lName: String,
+    fullName: String,
     img: String,
+    parentContact: String,
     parent: {
       type: Schema.Types.ObjectId,
       ref: 'Parent'
