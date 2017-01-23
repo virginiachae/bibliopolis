@@ -54,13 +54,13 @@ app.use('/', function(req, res, next) {
 //     });
 // });
 //
-// app.get('/users/destroy', function (req,res){
-//   User.remove({})
+// app.get('/children/destroy', function (req,res){
+//   Children.remove({})
 //   .exec(function(err, success) {
 //         res.send(success);
 //     });
 // });
-var currentUserId;
+
 app.get('/', function(req, res) {
     res.render('index.html.ejs');
 });
@@ -123,7 +123,7 @@ app.post('/api/children', function(req, res) {
             console.log('error', err);
         }
         console.log(child);
-        res.json(child);
+        res.redirect('../children/new');
     });
 })
 
@@ -159,32 +159,10 @@ app.put('/api/books', function(req, res) {
     })
 });
 
-app.put('/api/books', function(req, res) {
-    console.log('updating with data', req.body);
-    Book.findById(req.body._id, function(err, foundBook) {
-        console.log(req.body);
-        if (err) {
-            console.log('error in server.js', err);
-        } else {
-            foundBook.title = req.body.title;
-            foundBook.author = req.body.author;
-            foundBook.ageRange = req.body.ageRange;
-            foundBook.img = req.body.img;
-            foundBook.save(function(err, savedBook) {
-                if (err) {
-                    console.log('saving altered user failed in last server thing');
-                }
-                res.json({
-                    savedBook
-                });
-            });
-        }
-    })
-});
+
 app.patch('/api/books', function(req, res) {
     console.log('updating rental with data', req.body);
     Book.findById(req.body._id, function(err, foundBook) {
-        console.log(req.body);
         if (err) {
             console.log('error in server.js', err);
         } else {
@@ -215,7 +193,39 @@ app.patch('/api/books', function(req, res) {
     })
 })
 
+app.put('/api/children', function(req, res) {
+    console.log('returning rental with data', req.body);
+    Children.findOne({
+      fullName: req.body.child.fullName
+    }, function(err, foundChild) {
+        if (err) {
+            console.log('error in server.js', err);
+        } else {
+            Book.findById(req.body._id, function(err, childBook) {
+                if (err) {
+                    console.log(err);
+                }
+                var index = foundChild.books.indexOf(childBook);
+                foundChild.books.splice(index,1);
+                childBook.child = null;
+                childBook.save(function(err, succ) {
+                    if (err) {
+                        console.log(err);
+                    }
+                    foundChild.save(function(err, savedChild) {
+                        if (err) {
+                            console.log('saving altered user failed in last server thing');
+                        }
+                        res.json({
+                            savedChild
+                        });
+                    });
+                })
 
+            })
+        }
+    })
+})
 
 app.delete('/api/books/:id', function destroy(req, res) {
     console.log(req);

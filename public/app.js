@@ -43,7 +43,6 @@ biblio.controller('BooksIndexController', ['$scope', '$http', function($scope, $
         method: 'GET',
         url: '/api/books'
     }).then(function successCb(res) {
-        console.log(res);
         $scope.books = res.data
     }, function errorCb(res) {
         console.log('there was an error getting book data', res);
@@ -55,7 +54,6 @@ biblio.controller('UsersIndexController', ['$scope', '$http', function($scope, $
         method: 'GET',
         url: '/api/users'
     }).then(function successCb(res) {
-        console.log(res);
 				$scope.users = res.data
     }, function errorCb(res) {
         console.log('there was an error getting book data', res);
@@ -90,7 +88,6 @@ biblio.controller('UserShowController', ['$scope', '$http', '$routeParams', func
     }).then(function successCallback(json) {
       // don't need to do anything!
     }, function errorCallback(res) {
-      console.log('user is ', user);
       console.log('There was an error editing the data in angular', res);
     });
   }
@@ -103,7 +100,6 @@ biblio.controller('UserShowController', ['$scope', '$http', '$routeParams', func
   }).then(function successCallback(json) {
     // don't need to do anything!
   }, function errorCallback(res) {
-    console.log('book is ', book);
     console.log('There was an error editing the data in angular', res);
   });
 }
@@ -116,7 +112,6 @@ $scope.deleteBook = function (book) {
       var index = $scope.user.books.indexOf(book);
       $scope.user.books.splice(index,1)
     }, function errorCallback(response) {
-      console.log($routeParams);
       console.log('There was an error deleting the data', response);
     });
   }
@@ -128,11 +123,23 @@ $scope.deleteBook = function (book) {
     data: book
   }).then(function successCallback(json) {
     var index = $scope.user.books.indexOf(book);
-    $scope.user.books[index]= json
+    $scope.user.books[index]= json.data.savedBook;
   }, function errorCallback(res) {
-    console.log('book is ', book);
     console.log('There was an error editing the data in angular', res);
   });
+}
+
+$scope.returnBook = function (book) {
+$http({
+  method: 'PUT',
+  url: '/api/children',
+  data: book
+}).then(function successCallback(json) {
+  var index = $scope.user.books.indexOf(book);
+  $scope.user.books[index].child = null;
+}, function errorCallback(res) {
+  console.log('There was an error editing the data in angular', res);
+});
 }
 
 

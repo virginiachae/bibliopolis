@@ -54,6 +54,7 @@
                 <br>
                 <button class='btn btn-warning' ng-hide="borrowing" ng-click="borrowing = true">Rent out Book</button>
                 <button class='btn btn-warning' ng-show="borrowing" ng-click="borrowBook(book); borrowing = false" action="/api/books" method: "PATCH">Save Changes</button>
+                <button class='btn btn-danger' ng-click="returnBook(book)" action="/api/children" method: "PUT">Return Book</button>
             </div>
                 </div>
                 </div>
