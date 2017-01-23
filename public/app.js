@@ -33,7 +33,6 @@ biblio.config(['$routeProvider', '$locationProvider', function($routeProvider, $
             templateUrl: 'templates/UsersIndex.html.ejs',
             controller: 'UsersIndexController'
         })
-
 }]);
 
 biblio.controller('BooksIndexController', ['$scope', '$http', function($scope, $http) {
@@ -61,7 +60,7 @@ biblio.controller('UsersIndexController', ['$scope', '$http', function($scope, $
 
 }])
 
-biblio.controller('UserShowController', ['$scope', '$http', function($scope, $http) {
+biblio.controller('UserShowController', ['$scope', '$http', '$routeParams', function($scope, $http, $routeParams) {
 		$http({
         method: 'GET',
         url: '/api/current-user'
@@ -100,11 +99,12 @@ biblio.controller('UserShowController', ['$scope', '$http', function($scope, $ht
 $scope.deleteBook = function (book) {
     $http({
       method: 'DELETE',
-      url: '/api/books'
+      url: '/api/books/'+ book._id,
     }).then(function successCallback(json) {
       var index = $scope.user.books.indexOf(book);
-       $scope.user.books.splice(index,1)
+      $scope.user.books.splice(index,1)
     }, function errorCallback(response) {
+      console.log($routeParams);
       console.log('There was an error deleting the data', response);
     });
   }
