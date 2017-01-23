@@ -28,33 +28,33 @@
 <br>
 <hr>
                 <div ng-repeat="book in user.books | orderBy: title | filter: search">
-                  <div class="list-group-item col-md-offset-1">
+                  <div class="list-group-item">
                     <div class="row">
                     <div class="col-md-4">
                   <img class="book-pic" src="{{book.img}}" alt="" />
                   <input ng-show="editing" ng-model="book.img" name="img" type="text" class="form-control input-md" placeholder="Image URL">
                 </div>
-                    <div class="col-md-8">
+                    <div class="col-md-4">
                     <h4>{{book.title}}</h4>
                     <input ng-show="editing" ng-model="book.title" name="title" type="text" class="form-control input-md" placeholder="Title">
                     by: {{book.author}} <br>
                     <input ng-show="editing" ng-model="book.author" name="author" type="text" class="form-control input-md" placeholder="Author">
                     For ages: {{book.ageRange}}<br>
                     <input ng-show="editing" ng-model="book.ageRange" name="ageRange" type="text" class="form-control input-md" placeholder="Age Range">
-                    Checked Out By: {{book.child}}
-                    <input ng-show="editing" ng-model="book.child" name="child" type="text" class="form-control input-md" placeholder="Child's Name">
-                    <br>
                     <button class='btn btn-info' ng-hide="editing" ng-click="editing = true">Edit Book</button>
                     <button class='btn btn-success' ng-show="editing" ng-click="editBook(book); editing = false" action="/api/books" method: "PUT">Save Changes</button>
                     <button class='btn btn-danger' ng-click="deleteBook(book)" action="/api/books" method: "DELETE">Delete Book</button>
-                    <!-- <button class='btn btn-warning' ng-hide="borrowing" ng-click="borrowing = true">Rent out Book</button>
-                    <br>
-                    <input type:"text" ng-show="borrowing" ng-model="search" name="child" class="form-control input-md" placeholder="Search for Child">
-                    <div ng-repeat="child in children | orderBy: fullName | filter: search" ng-show="borrowing">
-                    {{child.fullName}}
-                  </div>
-                  <button class='btn btn-warning' ng-show="borrowing" ng-click="borrowBook(book); borrowing = false" action="/api/books" method: "PATCH">Rent out Book</button> -->
                 </div>
+                <div class="col-md-4">
+                <h4>Checked Out By:</h4>
+                <img class="kid-pic" src="{{book.child.img}}" alt="" />
+                <br>
+                {{book.child.fullName}}
+                <input ng-show="borrowing" ng-model="book.child" name="child" type="text" class="form-control input-md" placeholder="Child's Name">
+                <br>
+                <button class='btn btn-warning' ng-hide="borrowing" ng-click="borrowing = true">Rent out Book</button>
+                <button class='btn btn-warning' ng-show="borrowing" ng-click="borrowBook(book); borrowing = false" action="/api/books" method: "PATCH">Save Changes</button>
+            </div>
                 </div>
                 </div>
             </div>
