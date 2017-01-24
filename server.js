@@ -5,8 +5,8 @@ var express = require('express'),
     mongoose = require('mongoose'),
     User = require('./models/user'),
     Book = require('./models/book'),
-    Index = require('./models/index');
-Children = require('./models/children');
+    Index = require('./models/index'),
+    Children = require('./models/children');
 
 
 var session = require('express-session');
@@ -389,6 +389,4 @@ app.get('/api/books', function(req, res) {
 });
 
 // listen on port 3000
-app.listen(process.env.PORT || 3000, function() {
-    console.log('server started on locahost:3000');
-});
+app.listen(process.env.PORT || 3000);
