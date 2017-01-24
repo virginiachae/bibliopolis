@@ -6,7 +6,7 @@ var express = require('express'),
     User = require('./models/user'),
     Book = require('./models/book');
 Children = require('./models/children');
-mongoose.connect( process.env.MONGODB_URI || "mongodb://bibliopolis");
+mongoose.connect( process.env.MONGODB_URI || "mongodb://localhost/bibliopolis");
 
 var session = require('express-session');
 var controllers = require('./controllers');
