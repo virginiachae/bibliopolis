@@ -23,7 +23,6 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
-mongoose.connect('mongodb://localhost/bibliopolis');
 app.use(session({
     saveUninitialized: true,
     resave: true,
