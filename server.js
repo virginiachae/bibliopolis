@@ -96,7 +96,7 @@ app.post('/api/books', function(req, res) {
             return
         }
         newBook.user = bookUser;
-        newBook.child = "5886932cd2c5d03251112ca7"
+        newBook.child = null;
         bookUser.books.push(newBook);
         bookUser.save(function(err, succ) {
             if (err) {
@@ -232,7 +232,7 @@ app.put('/api/children', function(req, res) {
                 }
                 var index = foundChild.books.indexOf(childBook);
                 foundChild.books.splice(index, 1);
-                childBook.child = "5886932cd2c5d03251112ca7";
+                childBook.child = null;
                 childBook.save(function(err, succ) {
                     if (err) {
                         console.log(err);

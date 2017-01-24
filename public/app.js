@@ -136,7 +136,7 @@ $http({
   data: book
 }).then(function successCallback(json) {
   var index = $scope.user.books.indexOf(book);
-  $scope.user.books[index].child = "5886932cd2c5d03251112ca7";
+  $scope.user.books[index].child = null;
 }, function errorCallback(res) {
   console.log('There was an error editing the data in angular', res);
 });

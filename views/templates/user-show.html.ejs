@@ -51,9 +51,9 @@
                 {{book.child.fullName}}
                 <input ng-show="borrowing" ng-model="book.child" name="child" type="text" class="form-control input-md" placeholder="Child's Name">
                 <br>
-                <button class='btn btn-warning' ng-hide="book.child.fullName != 'Default'" ng-click="borrowing = true">Rent out Book</button>
+                <button class='btn btn-warning' ng-hide="book.child != null" ng-click="borrowing = true">Rent out Book</button>
                 <button class='btn btn-warning' ng-show="borrowing" ng-click="borrowBook(book); borrowing = false" action="/api/books" method: "PATCH">Save Changes</button>
-                <button class='btn btn-danger' ng-hide="book.child.fullName === 'Default'" ng-click="returnBook(book)" action="/api/children" method: "PUT">Return Book</button>
+                <button class='btn btn-danger' ng-show="book.child != null" ng-click="returnBook(book)" action="/api/children" method: "PUT">Return Book</button>
             </div>
                 </div>
                 </div>
