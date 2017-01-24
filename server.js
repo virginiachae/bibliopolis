@@ -6,6 +6,7 @@ var express = require('express'),
     User = require('./models/user'),
     Book = require('./models/book');
 Children = require('./models/children');
+mongoose.connect( process.env.MONGODB_URI || "mongodb://localhost/bibliopolis");
 
 var session = require('express-session');
 var controllers = require('./controllers');
@@ -198,7 +199,7 @@ app.patch('/api/books', function(req, res) {
                             from: 'bibliopolis.2017@gmail.com',
                             to: bookChild.parentContact,
                             subject: "Your Child Has Checked Out a Book from Bibliopolis",
-                            text: "testing"
+                            html: "This is to inform you that " + bookChild.fullName+ " has checked out " + foundBook.title+". Please make sure that the book is returned to Bibliopolis by"
                         }
                         transporter.sendMail(mailOptions, function(err, email) {
                             if (err) {
@@ -387,6 +388,6 @@ app.get('/api/books', function(req, res) {
 });
 
 // listen on port 3000
-app.listen(3000, function() {
+app.listen(process.env.PORT || 3000, function() {
     console.log('server started on locahost:3000');
 });
