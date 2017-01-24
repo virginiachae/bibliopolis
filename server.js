@@ -4,9 +4,10 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     mongoose = require('mongoose'),
     User = require('./models/user'),
-    Book = require('./models/book');
+    Book = require('./models/book'),
+    Index = require('./models/index');
 Children = require('./models/children');
-mongoose.connect( process.env.MONGODB_URI || "mongodb://localhost/bibliopolis");
+// mongoose.connect( process.env.MONGODB_URI || "mongodb://localhost/bibliopolis");
 
 var session = require('express-session');
 var controllers = require('./controllers');
