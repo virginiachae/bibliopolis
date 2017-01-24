@@ -5,7 +5,6 @@
                 <h2>Welcome {{user.fName}}!</h2>
                 <img class="profile-pic" src="{{user.img}}" alt="" />
                 <br>
-
                 <strong>Name: </strong><span ng-hide="editing">{{user.fName}} {{user.lName}}</span>
                 <input ng-show="editing" ng-model="user.fName" name="fName" type="text" class="form-control input-md" placeholder="first name">
                 <input ng-show="editing" ng-model="user.lName" name="lName" type="text" class="form-control input-md" placeholder="last name">
@@ -52,9 +51,9 @@
                 {{book.child.fullName}}
                 <input ng-show="borrowing" ng-model="book.child" name="child" type="text" class="form-control input-md" placeholder="Child's Name">
                 <br>
-                <button class='btn btn-warning' ng-hide="borrowing" ng-click="borrowing = true">Rent out Book</button>
+                <button class='btn btn-warning' ng-hide="book.child.fullName != 'Default'" ng-click="borrowing = true">Rent out Book</button>
                 <button class='btn btn-warning' ng-show="borrowing" ng-click="borrowBook(book); borrowing = false" action="/api/books" method: "PATCH">Save Changes</button>
-                <button class='btn btn-danger' ng-click="returnBook(book)" action="/api/children" method: "PUT">Return Book</button>
+                <button class='btn btn-danger' ng-hide="book.child.fullName === 'Default'" ng-click="returnBook(book)" action="/api/children" method: "PUT">Return Book</button>
             </div>
                 </div>
                 </div>

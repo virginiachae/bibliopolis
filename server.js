@@ -92,6 +92,7 @@ app.post('/api/books', function(req, res) {
             return
         }
         newBook.user = bookUser;
+        newBook.child = "5886932cd2c5d03251112ca7"
         bookUser.books.push(newBook);
         bookUser.save(function(err, succ) {
             if (err) {
@@ -190,6 +191,7 @@ app.patch('/api/books', function(req, res) {
 
             })
         }
+
     })
 })
 
@@ -207,7 +209,7 @@ app.put('/api/children', function(req, res) {
                 }
                 var index = foundChild.books.indexOf(childBook);
                 foundChild.books.splice(index,1);
-                childBook.child = null;
+                childBook.child = "5886932cd2c5d03251112ca7";
                 childBook.save(function(err, succ) {
                     if (err) {
                         console.log(err);
@@ -243,7 +245,7 @@ app.delete('/api/books/:id', function destroy(req, res) {
 // signup route (renders signup view)
 app.get('/signup', function(req, res) {
     if (req.session.userId != null || undefined) {
-        res.redirect('user-show')
+        res.redirect('profile')
     }
     res.render('index.html.ejs');
 });
@@ -261,14 +263,14 @@ app.post('/api/users', function(req, res) {
     // use the email and password to authenticate here
     User.createSecure(req.body.email, req.body.password, req.body.fName, req.body.lName, req.body.img, function(err, user) {
         req.session.userId = user._id;
-        res.redirect('../user-show')
+        res.redirect('../profile')
     });
 });
 
 // login route with placeholder response AJS DONE
 app.get('/login', function(req, res) {
     if (req.session.userId != null || undefined) {
-        res.redirect('user-show')
+        res.redirect('profile')
     }
     res.render('index.html.ejs');
 });
@@ -287,13 +289,13 @@ app.post('/sessions', function(req, res) {
             //User successfully logged in
             req.session.userId = currentUser._id;
             currentUserId = currentUser._id
-            res.redirect('/user-show')
+            res.redirect('/profile')
         }
     });
 });
 
 // show user profile page
-app.get('/user-show', function(req, res) {
+app.get('/profile', function(req, res) {
     // find the user currently logged in
     if (req.session.userId === undefined) {
         res.redirect('login')
