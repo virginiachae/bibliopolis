@@ -6,13 +6,10 @@ var express = require('express'),
     User = require('./models/user'),
     Book = require('./models/book'),
     Index = require('./models/index'),
-    Children = require('./models/children');
-
-
-var session = require('express-session');
-var controllers = require('./controllers');
-
-var nodemailer = require('nodemailer');
+    Children = require('./models/children'),
+    session = require('express-session'),
+    controllers = require('./controllers'),
+    nodemailer = require('nodemailer');
 
 
 // middleware
@@ -178,6 +175,8 @@ app.patch('/api/books', function(req, res) {
                     console.log(err);
                 }
                 foundBook.child = bookChild;
+                foundBook.rentalDate = new Date();
+                foundBook.rentalDue = new Date (foundBook.rentalDate.getTime() + 1000 * 3600 * 24 * 14);
                 bookChild.books.push(foundBook);
                 bookChild.save(function(err, succ) {
                     if (err) {

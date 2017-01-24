@@ -10,7 +10,8 @@ var BookSchema = new Schema({
     author: String,
     ageRange: String,
     img: String,
-		rentalDue: String,
+		rentalDate: Date,
+    rentalDue: Date,
 		fee: Number,
     user: {
       type: Schema.Types.ObjectId,
