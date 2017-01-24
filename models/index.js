@@ -1,1 +1,1 @@
-mongoose.connect( process.env.MONGODB_URI || "mongodb://localhost/bibliopolis" );
+mongoose.connect( process.env.MONGODB_URI || "mongolab-fitted-62319" );
