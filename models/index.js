@@ -1,1 +1,1 @@
-mongoose.connect( process.env.MONGODB_URI || "3000" );
+mongoose.connect( process.env.MONGODB_URI || "mongodb://localhost/bibliopolis" );
