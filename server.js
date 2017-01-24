@@ -10,6 +10,9 @@ Children = require('./models/children');
 var session = require('express-session');
 var controllers = require('./controllers');
 
+var nodemailer = require('nodemailer');
+
+
 // middleware
 app.use(express.static('public'));
 app.use(express.static('views'));
@@ -183,22 +186,41 @@ app.patch('/api/books', function(req, res) {
                         if (err) {
                             console.log('saving altered user failed in last server thing');
                         }
-                        res.json({
-                            savedBook
+                        var transporter = nodemailer.createTransport({
+                            service: 'Gmail', // loads nodemailer-ses-transport
+                            auth: {
+                                user: 'bibliopolis.2017@gmail.com',
+                                pass: 'confirm:password'
+                            }
                         });
+
+                        var mailOptions = {
+                            from: 'bibliopolis.2017@gmail.com',
+                            to: bookChild.parentContact,
+                            subject: "Your Child Has Checked Out a Book from Bibliopolis",
+                            text: "testing"
+                        }
+                        transporter.sendMail(mailOptions, function(err, email) {
+                            if (err) {
+                                console.log(err);
+                            } else {
+                                res.json({
+                                    savedBook
+                                })
+                            };
+                        })
                     });
-                })
-
+                });
             })
-        }
 
+        }
     })
 })
 
 app.put('/api/children', function(req, res) {
     console.log('returning rental with data', req.body);
     Children.findOne({
-      fullName: req.body.child.fullName
+        fullName: req.body.child.fullName
     }, function(err, foundChild) {
         if (err) {
             console.log('error in server.js', err);
@@ -208,7 +230,7 @@ app.put('/api/children', function(req, res) {
                     console.log(err);
                 }
                 var index = foundChild.books.indexOf(childBook);
-                foundChild.books.splice(index,1);
+                foundChild.books.splice(index, 1);
                 childBook.child = "5886932cd2c5d03251112ca7";
                 childBook.save(function(err, succ) {
                     if (err) {
