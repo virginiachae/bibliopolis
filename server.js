@@ -48,13 +48,16 @@ app.use('/', function(req, res, next) {
 
 //CRON
 var overDue = new CronJob({
-            cronTime: '00 27 17 * * 1-7',
+            cronTime: '00 00 00 * * 1-7',
             onTick: function() {
+              var currentTime = new Date().getTime();
+              console.log("current time is", currentTime);
               Book.find({})
-                    .populate('books')
                     .populate('child')
                     .exec(function(err, foundBook){
-                      foundBook.forEach(function() {
+                      foundBook.forEach(function(book) {
+                      if (book.rentalDue !=null && book.rentalDue.getTime() < currentTime) {
+                        console.log("book is ", book);
                 var transporter = nodemailer.createTransport({
                     service: 'Gmail', // loads nodemailer-ses-transport
                     auth: {
@@ -65,20 +68,19 @@ var overDue = new CronJob({
 
                 var mailOptions = {
                     from: 'bibliopolis.2017@gmail.com',
-                    to: foundBook.child.parentContact,
-                    subject: "Your Child Has Checked Out a Book from Bibliopolis",
-                    html: "This is to inform you that " + foundbook.child.fullName + " has checked out " + foundBook.title + ". Please make sure that the book is returned to Bibliopolis by " + foundBook.rentalDue + "."
+                    to: book.child.parentContact,
+                    subject: "Your Child's Book is Overdue",
+                    html: "Your child, "+ book.child.fullName+ "'s book "+book.title+" is overdue. Please return to Bibliopolis as soon as possible. Thank you."
                 }
 
                 transporter.sendMail(mailOptions, function(err, email) {
                         if (err) {
                             console.log(err);
                         } else {
-                            res.json({
-                                    savedBook
-                                })
+
                             }
                         })
+                      }
                     })
                     })
                   },
@@ -222,7 +224,8 @@ var overDue = new CronJob({
                             }
                             foundBook.child = bookChild;
                             foundBook.rentalDate = new Date();
-                            foundBook.rentalDue = new Date(foundBook.rentalDate.getTime() + 1000 * 3600 * 24 * 14);
+                            //1000 * 3600 * 24 * 14
+                            foundBook.rentalDue = new Date(foundBook.rentalDate.getTime() + 1000 * 3600);
                             bookChild.books.push(foundBook);
                             bookChild.save(function(err, succ) {
                                 if (err) {
@@ -277,6 +280,8 @@ var overDue = new CronJob({
                             var index = foundChild.books.indexOf(childBook);
                             foundChild.books.splice(index, 1);
                             childBook.child = null;
+                            childBook.rentalDate = null;
+                            childBook.rentalDue = null;
                             childBook.save(function(err, succ) {
                                 if (err) {
                                     console.log(err);
