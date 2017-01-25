@@ -12,10 +12,12 @@
   "dependencies": {
     "bcrypt": "^1.0.2",
     "body-parser": "^1.16.0",
+    "cron": "^1.2.1",
     "ejs": "^2.5.5",
     "express": "^4.14.0",
     "express-session": "^1.14.2",
     "mongoose": "^4.7.7",
+    "node-cron": "^1.1.2",
     "nodemailer": "^2.7.2"
   }
 }
