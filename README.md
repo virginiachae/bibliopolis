@@ -1,5 +1,6 @@
 # bibliopolis
 a book checkout app for librarians! 
 
-Inline-style: 
-![alt text](http://i.imgur.com/xsZvugh.jpg "Logo Title Text 1")
+# why bibliopolis? 
+bibliopolis came about because I saw a need in my church's children's library. 
+![alt text](http://i.imgur.com/YRsSIAg.jpg "The REAL Bibliopolis")
