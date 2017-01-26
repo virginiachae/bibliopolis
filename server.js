@@ -252,7 +252,7 @@ app.patch('/api/books', function(req, res) {
                 }
                 foundBook.child = bookChild;
                 foundBook.rentalDate = new Date();
-                foundBook.rentalDue = new Date(foundBook.rentalDate.getTime() + 1000 * 3600 * 24 *14);
+                foundBook.rentalDue = new Date(foundBook.rentalDate.getTime() + 1000 * 3600 * 24 * 14);
                 bookChild.books.push(foundBook);
                 bookChild.save(function(err, succ) {
                     if (err) {
