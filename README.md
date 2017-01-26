@@ -19,5 +19,12 @@ bibliopolis is a  way to checkout book to kids and autmotically notifying the pa
 * Express.js
 * AngularJS
 * Node.js
-  ..* bcrypt
+ * bcrypt
+ * body-parser
+ * cron
+ * ejs
+ * express-session
+ * node-cron
+ * nodemailer
+ 
 
