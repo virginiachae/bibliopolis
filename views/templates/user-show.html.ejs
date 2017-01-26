@@ -1,62 +1,154 @@
-<div class="container text-center">
-  <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-            <div class="list-group-item">
-                <h2>Welcome {{user.fName}}!</h2>
-                <img class="profile-pic" src="{{user.img}}" alt="" />
-                <br>
-                <strong>Name: </strong><span ng-hide="editing">{{user.fName}} {{user.lName}}</span>
-                <input ng-show="editing" ng-model="user.fName" name="fName" type="text" class="form-control input-md" placeholder="first name">
-                <input ng-show="editing" ng-model="user.lName" name="lName" type="text" class="form-control input-md" placeholder="last name">
-                <input ng-hide="true" ng-model="user._id" name="_id" type="text" class="form-control input-md" placeholder="last name">
-                <br>
-                <strong>Email: </strong><span ng-hide="editing">{{user.email}}</span>
-                <input ng-show="editing" ng-model="user.email" name="email" type="text" class="form-control input-md" placeholder="email">
-                <br>
-                <button class='btn btn-info' ng-hide="editing" ng-click="editing = true">Edit Profile</button>
-                <button class='btn btn-success' ng-show="editing" ng-click="editUser(user); editing = false" action="/api/users" method: "PUT">Save Changes</button>
-                <a id="logout" href="/logout" class="btn btn-default">Log Out</a>
+<nav class="navbar navbar-ct-transparent">
+  <ul class="nav navbar-nav navbar-right ">
+	<li class="logout"><a href="/logout" class="btn btn-default btn-fill">Logout</a></li>
+</ul>
+</nav>
+<div class="wrapper">
+  <div class="profile-background">
+        <div class="filter-black"></div>
+    </div>
+    <div class="profile-content">
+      <div class="container text-center">
+            <div class="row owner">
+                <div class="col-md-2 col-md-offset-5 col-sm-4 col-sm-offset-4 col-xs-6 col-xs-offset-3 text-center">
+                    <div class="avatar">
+                        <img src="{{user.img}}" alt="Circle Image" class="img-circle img-no-padding img-responsive profile-pic">
+                    </div>
+                    <div class="name">
+                        <h4>{{user.fName}} {{user.lName}}<br /><small>{{user.email}}</small></h4>
+                        <input ng-show="editing" ng-model="user.fName" name="fName" type="text" class="form-control input-md" placeholder="first name">
+                        <input ng-show="editing" ng-model="user.lName" name="lName" type="text" class="form-control input-md" placeholder="last name">
+                        <input ng-show="editing" ng-model="user.email" name="email" type="text" class="form-control input-md" placeholder="email">
+                        <input ng-hide="true" ng-model="user._id" name="_id" type="text" class="form-control input-md">
+                    </div>
+                </div>
             </div>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 text-center">
+                  <button class='btn btn-info btn-sm' ng-hide="editing" ng-click="editing = true">Edit Profile</button>
+                  <button class='btn btn-success btn-sm' ng-show="editing" ng-click="editUser(user); editing = false" action="/api/users" method: "PUT">Save Changes</button>
+                </div>
+            </div>
+<br>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#newBook">
+Add a Book
+    </button>
+    <button type="button" class="btn btn-success btn-md" data-toggle="modal" data-target="#newChild">
+Add a Member
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="newBook" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Add a New Book</h4>
+          </div>
+          <div class="modal-body">
+                  <form id="signup-form" action="/api/books" method="POST">
+                    <div class="form-group">
+                      <input type="text" name="user" class="form-control" placeholder="User Email" autofocus>
+                    </div>
+                    <div class="form-group">
+                      <input type="text" name="title" class="form-control" placeholder="Title" autofocus>
+                    </div>
+                    <div class="form-group">
+                      <input type="text" name="author" class="form-control" placeholder="Author" autofocus>
+                    </div>
+                    <div class="form-group">
+                      <input type="text" name="ageRange" class="form-control" placeholder="Age Range (i.e. 6-9)" autofocus>
+                    </div>
+                    <div class="form-group">
+                      <input type="text" name="img" class="form-control" placeholder="Image URL" autofocus>
+                    </div>
+                    <div class="form-group">
+                    <input type="submit" value="Add Book!" class="btn btn-primary">
+                    </div>
+                  </form>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
           </div>
         </div>
+      </div>
+    </div>
 
-<br>
-<h1>My Books: </h1>
-<br>
-<input type="text" ng-model="search" placeholder="search for a book" />
-<br>
-<hr>
-                <div ng-repeat="book in user.books | orderBy: title | filter: search">
-                  <div class="list-group-item">
-                    <div class="row">
-                    <div class="col-md-4">
-                  <img class="book-pic" src="{{book.img}}" alt="" />
-                  <input ng-show="editing" ng-model="book.img" name="img" type="text" class="form-control input-md" placeholder="Image URL">
-                </div>
-                    <div class="col-md-4">
-                    <h4>{{book.title}}</h4>
-                    <input ng-show="editing" ng-model="book.title" name="title" type="text" class="form-control input-md" placeholder="Title">
-                    by: {{book.author}} <br>
-                    <input ng-show="editing" ng-model="book.author" name="author" type="text" class="form-control input-md" placeholder="Author">
-                    For ages: {{book.ageRange}}<br>
-                    <input ng-show="editing" ng-model="book.ageRange" name="ageRange" type="text" class="form-control input-md" placeholder="Age Range">
-                    <button class='btn btn-info' ng-hide="editing" ng-click="editing = true">Edit Book</button>
-                    <button class='btn btn-success' ng-show="editing" ng-click="editBook(book); editing = false" action="/api/books" method: "PUT">Save Changes</button>
-                    <button class='btn btn-danger' ng-click="deleteBook(book)" action="/api/books" method: "DELETE">Delete Book</button>
+    <!-- Modal -->
+    <div class="modal fade" id="newChild" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Add a Library Patron</h4>
+          </div>
+          <div class="modal-body">
+            <form id="signup-form" action="/api/children" method="POST">
+              <div class="form-group">
+                <input type="text" name="fullName" class="form-control" placeholder="Full Name" autofocus>
+              </div>
+              <div class="form-group">
+                <input type="text" name="parentContact" class="form-control" placeholder="Parent's Email" autofocus>
+              </div>
+              <div class="form-group">
+                <input type="text" name="img" class="form-control" placeholder="Image URL" autofocus>
+              </div>
+              <div class="form-group">
+                <input type="submit" value="Sign Up" class="btn btn-primary">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <br>
+    <h1>My Books: </h1>
+    <br>
+    <!-- <ng-youtube-embed url="link" autoplay="true" color="white" disablekb="true" end="20">
+    </ng-youtube-embed> -->
+
+    <br>
+
+    <input type="text" ng-model="search" placeholder="search for a book" />
+    <br>
+    <hr>
+    <div ng-repeat="book in user.books | orderBy: title | filter: search">
+        <div class="list-group-item">
+            <div class="row">
+                <div class="col-md-4">
+                    <img class="book-pic" src="{{book.img}}" alt="" />
+                    <input ng-show="editing" ng-model="book.img" name="img" type="text" class="form-control input-md" placeholder="Image URL">
                 </div>
                 <div class="col-md-4">
-                <h4>Checked Out By:</h4>
-                <img class="kid-pic" src="{{book.child.img}}" alt="" />
-                <br>
-                {{book.child.fullName}}
-                <input ng-show="borrowing" ng-model="book.child" name="child" type="text" class="form-control input-md" placeholder="Child's Name">
-                <br>
-                <button class='btn btn-warning' ng-hide="book.child != null" ng-click="borrowing = true">Rent out Book</button>
-                <button class='btn btn-warning' ng-show="borrowing" ng-click="borrowBook(book); borrowing = false" action="/api/books" method: "PATCH">Save Changes</button>
-                <button class='btn btn-danger' ng-show="book.child != null" ng-click="returnBook(book)" action="/api/children" method: "PUT">Return Book</button>
-            </div>
+                    <h4>{{book.title}}</h4>
+                    <input ng-show="editing" ng-model="book.title" name="title" type="text" class="form-control input-md" placeholder="Title"> by: {{book.author}} <br>
+                    <input ng-show="editing" ng-model="book.author" name="author" type="text" class="form-control input-md" placeholder="Author"> For ages: {{book.ageRange}}<br>
+                    <input ng-show="editing" ng-model="book.ageRange" name="ageRange" type="text" class="form-control input-md" placeholder="Age Range">
+                    <button class='btn btn-info btn-fill btn-xs' ng-hide="editing" ng-click="editing = true">Edit Book</button>
+                    <button class='btn btn-info btn-xs' ng-show="editing" ng-click="editBook(book); editing = false" action="/api/books" method: "PUT">Save Changes</button>
+                    <button class='btn btn-danger btn-fill btn-xs' ng-click="deleteBook(book)" action="/api/books" method: "DELETE">Delete Book</button>
                 </div>
+                <div class="col-md-4">
+                    <h4>Checked Out By:</h4>
+                    <img class="kid-pic" src="{{book.child.img}}" alt="" />
+                    <br> {{book.child.fullName}}
+                    <input ng-show="borrowing" ng-model="book.child" name="child" type="text" class="form-control input-md" placeholder="Child's Name">
+                    <br>
+                    <button class='btn btn-warning btn' ng-hide="book.child != null" ng-click="borrowing = true">Rent out Book</button>
+                    <button class='btn btn-warning' ng-show="borrowing" ng-click="borrowBook(book); borrowing = false" action="/api/books" method: "PATCH">Save Changes</button>
+                    <button class='btn btn-warning btn-fill' ng-show="book.child != null" ng-click="returnBook(book)" action="/api/children" method: "PUT">Return Book</button>
                 </div>
             </div>
+        </div>
+    </div>
 </div>
-</body>
+</div>

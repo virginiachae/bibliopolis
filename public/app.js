@@ -1,5 +1,5 @@
 console.log('linked');
-var biblio = angular.module('bibliopolisApp', ['ngRoute']);
+var biblio = angular.module('bibliopolisApp', ['ngRoute', 'ngYoutubeEmbed']);
 
 biblio.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
 
@@ -23,7 +23,7 @@ biblio.config(['$routeProvider', '$locationProvider', function($routeProvider, $
             templateUrl: "templates/signup.html.ejs"
         })
         .when('/logout', {
-            redirectTo: '/login'
+            redirectTo: '/'
         })
         .when('/books', {
             templateUrl: 'templates/booksIndex.html.ejs',
@@ -62,6 +62,8 @@ biblio.controller('UsersIndexController', ['$scope', '$http', function($scope, $
 }])
 
 biblio.controller('UserShowController', ['$scope', '$http', '$routeParams', function($scope, $http, $routeParams) {
+  $scope.link ='https://www.youtube.com/watch?v=86JQV_m_i9w';
+  console.log("scope link is"+$scope.link);
 		$http({
         method: 'GET',
         url: '/api/current-user'
