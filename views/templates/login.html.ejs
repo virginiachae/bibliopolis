@@ -1,21 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- bootstrap css -->
-  <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-  <script src="scripts.js"></script>
-
-  <title>Bibliopolis</title>
-</head>
-<body>
-  <div class="container text-center">
-    <div class="row">
-      <div class="col-md-6 col-md-offset-3">
+<div class="wrapper">
+    <div class="login-background">
+        <div class="filter-black"></div>
+            <div class="container">
+                    <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1 ">
+                        <div class="login-card">
         <h1>Log In</h1>
         <hr>
 
@@ -28,13 +16,14 @@
             <input type="password" name="password" class="form-control" placeholder="Password">
           </div>
           <div class="form-group">
-            <input type="submit" value="Log In" class="btn btn-primary">
+            <input type="submit" value="Log In" class="btn btn-neutral btn-fill">
           </div>
-          <a href="/signup">Sign Up</a>
+          Not a member? <a href="/signup" class="btn-neutral">Sign Up!</a>
           <h1>{{message}}</h1>
         </form>
       </div>
     </div>
-  </div>
-</body>
-</html>
+</div>
+</div>
+</div>
+</div>

@@ -3,6 +3,11 @@
 	width: 100px;
 }
 
+.pan-pic{
+	height: 150px;
+	width: 100px;
+}
+
 .book-pic{
 	height: 300px;
 	width: 200px;
@@ -21,7 +26,7 @@
 .landing-header {
 	background-image: url("http://i.imgur.com/5BV2vvS.jpg");
   background-size: cover;
-  min-height: 570px;
+  min-height: 700px;
 }
 
 .landing-header .motto {
@@ -72,7 +77,7 @@
 }
 
 .register-background {
-  background-image: url("../paper_img/landscape.jpg");
+  background-image: url("http://i.imgur.com/CmD5txP.jpg");
   background-position: center center;
   background-size: cover;
   min-height: 100vh;
@@ -82,7 +87,7 @@
 }
 
 .register-background .filter-black::after {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.3);
   content: "";
   display: block;
   height: 100%;
@@ -94,7 +99,7 @@
 }
 
 .register-background .container {
-  margin-top: 11%;
+  margin-top: 2%;
   position: relative;
   z-index: 3;
 }
@@ -112,7 +117,7 @@
 }
 
 .register-card {
-  background-color: #FF8F5E;
+  background-color: #42B2A4;
   border-radius: 8px;
   color: #fff;
   max-width: 350px;
@@ -148,7 +153,7 @@
 }
 
 .profile-background .filter-black::after {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(255, 255, 255, 0.3);
   content: "";
   display: block;
   height: 300px;
@@ -193,4 +198,71 @@
 
 .logout {
 	margin-right: 50px !important;
+}
+
+.login-background {
+  background-image: url("http://i.imgur.com/ZxlCYJh.jpg");
+  background-position: center center;
+  background-size: cover;
+  min-height: 100vh;
+  overflow: hidden;
+  position: absolute;
+  width: 100%;
+}
+
+.login-background .filter-black::after {
+  background-color: rgba(0, 0, 0, 0.3);
+  content: "";
+  display: block;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+.login-background .container {
+  margin-top: 5%;
+  position: relative;
+  z-index: 3;
+}
+
+.login-footer {
+  bottom: 20px;
+  color: #fff;
+  position: absolute;
+  z-index: 3;
+  width: 100%;
+}
+
+.login-footer .fa-heart {
+  color: #EB5E28;
+}
+
+.login-card {
+  background-color: #FF8F5E;
+  border-radius: 8px;
+  color: #fff;
+  max-width: 350px;
+  margin: 20px 0 70px;
+  min-height: 400px;
+  padding: 30px;
+}
+
+.login-card label {
+  margin-top: 15px;
+}
+
+.login-card .title {
+  color: #B33C12;
+  text-align: center;
+}
+
+.login-card .btn {
+  margin-top: 30px;
+}
+
+.login-card .forgot {
+  text-align: center;
 }
