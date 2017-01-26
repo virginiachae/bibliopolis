@@ -34,6 +34,16 @@ bibliopolis is a  way to checkout book to kids and autmotically notifying the pa
 
 The idea was for the librarian AND the parent to be able to track which child had which book and when each were due and possibly even allow the parent to pay the fee with PayPal. However, what ended up coming out looks much different. Mostly because I did it in the MEAN stack and not with Ruby on Rails. 
 
+# Most Difficult Problem
+
+
+# Unsolved Problems and Future Features
+* Error handling (the one person I know who is going to use this is smart, she'll figure it out)
+* An interface for parents, currently this is a librarian interface
+* Associate "members" to each librarian
+
+
+
 
 
 
