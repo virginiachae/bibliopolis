@@ -1,3 +1,5 @@
+//is this doing anything....
+
 // // $(document).ready(function() {
 // //     // select the form and serialize its data
 // //     $("#signup-form").on("submit", function(e) {

@@ -47,6 +47,8 @@ app.use('/', function(req, res, next) {
     next();
 });
 
+//THIS IS GREAT!!! well done with the cron job
+
 //CRON
 var overDue = new CronJob({
     cronTime: '00 00 00 * * 1-7',
@@ -159,6 +161,7 @@ app.get('/api/books', function(req, res) {
         });
 });
 
+//this sometimes breaks for me...maybe need to add some alerts for edge cases?
 app.post('/api/books', function(req, res) {
     var newBook = new Book(req.body);
     User.findOne({
@@ -465,3 +468,5 @@ app.get('/api/books', function(req, res) {
 
 // listen on port 3000
 app.listen(process.env.PORT || 3000);
+
+//OMG so much code in this file. I think it is a good idea to refactor this and split it up into viewable chunks that make sense.

@@ -5,6 +5,7 @@ biblio.config(['$routeProvider', '$locationProvider', function($routeProvider, $
 
     $locationProvider.html5Mode(true);
 
+//Very nice.
     $routeProvider
         .when('/', {
             templateUrl: 'templates/welcome.html.ejs'
